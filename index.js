@@ -6,6 +6,7 @@ ctx.canvas.width = size.x;
 ctx.canvas.height = size.y;
 console.log('abcdefgh');
 // ctx.fillRect(30,30,30,30)
+// So here is a little test
 var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;
