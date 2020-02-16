@@ -1,10 +1,10 @@
-console.log("Hello cruel world 222");
+// console.log("Hello cruel world 222")
 var canvas = document.getElementById("mainCanvas");
 var ctx = canvas.getContext("2d");
 var size = { x: window.innerWidth, y: window.innerHeight };
 ctx.canvas.width = size.x;
 ctx.canvas.height = size.y;
-console.log('abcdefgh');
+// console.log('abcdefgh')
 // ctx.fillRect(30,30,30,30)
 // So here is a little test aa
 // -------- aaa
