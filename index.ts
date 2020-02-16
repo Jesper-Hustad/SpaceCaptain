@@ -74,26 +74,27 @@ class SpaceShip {
 }
 
 
+canvas.addEventListener('touchstart', function(e) {touchUpdate(e.changedTouches)}, false);
 
-canvas.addEventListener('touchmove', function(e) {
-    // Iterate through the list of touch points that changed 
-    // since the last event and print each touch point's identifier.
+canvas.addEventListener('touchmove', function(e) {touchUpdate(e.changedTouches)}, false);
 
-    let output = "  Touches: "
+canvas.addEventListener('touchend', function(e) {touchUpdate(e.changedTouches)}, false);
 
-    for (var i=0; i < e.changedTouches.length; i++) {
-        output = output + e.changedTouches[i].identifier + '  '
-      console.log("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
-      let p = e.changedTouches[i]
 
-      var rect = canvas.getBoundingClientRect();
-      drawPix({x:p.clientX-rect.left,y:p.clientY-rect.top})
+let touches : TouchList = new TouchList()  
+
+function touchUpdate(touches:TouchList){
+    let output = ' '
+    for (let i = 0; i < touches.length; i++) {
+        const t = touches[i];
+
+        var rect = canvas.getBoundingClientRect();
+        drawPix({x:t.clientX-rect.left,y:t.clientY-rect.top})
+        output = output + '  ' + t.identifier
     }
-    
     document.getElementById("p1").innerHTML = output;
+}
 
- }, false);
- 
 
 let spaceship = new SpaceShip({x:60,y:100},30,90)
 
@@ -114,4 +115,15 @@ function drawPix(point:Point){
     ctx.fillStyle = "rgb(255,10,10)"
 }
 
-document.getElementById("p1").innerHTML = 'testing 123333';
+// document.getElementById("p1").innerHTML = 'testing 123333';
+
+
+
+// output = output + e.changedTouches[i].identifier + '  '
+// console.log("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
+// let p = e.changedTouches[i]
+
+// document.getElementById("p1").innerHTML = output;
+
+// var rect = canvas.getBoundingClientRect();
+// drawPix({x:p.clientX-rect.left,y:p.clientY-rect.top})
