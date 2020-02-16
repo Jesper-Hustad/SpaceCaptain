@@ -54,12 +54,15 @@ var SpaceShip = /** @class */ (function () {
 canvas.addEventListener('touchmove', function (e) {
     // Iterate through the list of touch points that changed 
     // since the last event and print each touch point's identifier.
+    var output = '  Touches: ';
     for (var i = 0; i < e.changedTouches.length; i++) {
+        output += e.changedTouches[i].identifier + '  ';
         console.log("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
         var p = e.changedTouches[i];
         var rect = canvas.getBoundingClientRect();
         drawPix({ x: p.clientX - rect.left, y: p.clientY - rect.top });
     }
+    document.getElementById("p1").innerHTML = output;
 }, false);
 var spaceship = new SpaceShip({ x: 60, y: 100 }, 30, 90);
 spaceship.draw(ctx);
