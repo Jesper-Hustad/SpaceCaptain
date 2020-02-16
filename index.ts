@@ -9,7 +9,8 @@ ctx.canvas.height = size.y;
 console.log('abcdefgh')
 
 // ctx.fillRect(30,30,30,30)
-// So here is a little test
+// So here is a little test aa
+// --------
 
 class Point {
     x:number
