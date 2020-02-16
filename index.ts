@@ -55,13 +55,8 @@ class SpaceShip {
 
     drawCollision(ctx:CanvasRenderingContext2D){
         let offset = rotationToPoint({x:0,y:this.height/2-this.width/2},this.rotation)
-        // ctx.fillStyle = "rgb(0,0,0)"
-        // ctx.fillRect(this.center.x+p1.x-5,this.center.y+p1.y-5,5,5)
-        // ctx.fillStyle = "rgb(255,10,10)"
 
         let collisionPoints : Point[] = []
-
-        // collisionPoints.push
 
         collisionPoints.push({x:this.center.x + offset.x, y:this.center.y + offset.y})
         collisionPoints.push({x:this.center.x - offset.x, y:this.center.y - offset.y})
@@ -79,33 +74,24 @@ class SpaceShip {
 }
 
 
-canvas.addEventListener('touchmove', function(event) {
-    // If there's exactly one finger inside this element
 
-    console.log('Touch occured')
+canvas.addEventListener('touchmove', function(e) {
+    // Iterate through the list of touch points that changed
+    // since the last event and print each touch point's identifier.
+    for (var i=0; i < e.changedTouches.length; i++) {
+      console.log("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
+      let p = e.changedTouches[i]
 
-
-    
-
-    if (event.targetTouches.length == 1) {
-      var touch = event.targetTouches[0];
-      // Place element where the finger is
-      
       var rect = canvas.getBoundingClientRect();
-      drawPix({x:touch.pageX-rect.left,y:touch.pageY-rect.top})
-    }
-  }, false);
-
+      drawPix({x:p.clientX-rect.left,y:p.clientY-rect.top})
+    }   
+ }, false);
+ 
 
 let spaceship = new SpaceShip({x:60,y:100},30,90)
 
 spaceship.draw(ctx)
 spaceship.drawCollision(ctx)
-
-
-// canvas.addEventListener("touchmove", handleMove, false)
-
-
 
 function rotationToPoint(p:Point,rot:number){
     //https://academo.org/demos/rotation-about-point/ <-- read for info
