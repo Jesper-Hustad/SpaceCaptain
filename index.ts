@@ -76,7 +76,7 @@ class SpaceShip {
 
 
 canvas.addEventListener('touchmove', function(e) {
-    // Iterate through the list of touch points that changed
+    // Iterate through the list of touch points that changed 
     // since the last event and print each touch point's identifier.
     for (var i=0; i < e.changedTouches.length; i++) {
       console.log("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
