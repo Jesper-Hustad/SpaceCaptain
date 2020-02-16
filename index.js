@@ -54,9 +54,9 @@ var SpaceShip = /** @class */ (function () {
 canvas.addEventListener('touchmove', function (e) {
     // Iterate through the list of touch points that changed 
     // since the last event and print each touch point's identifier.
-    var output = '  Touches: ';
+    var output = "  Touches: ";
     for (var i = 0; i < e.changedTouches.length; i++) {
-        output += e.changedTouches[i].identifier + '  ';
+        output = output + e.changedTouches[i].identifier + '  ';
         console.log("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
         var p = e.changedTouches[i];
         var rect = canvas.getBoundingClientRect();
@@ -79,3 +79,4 @@ function drawPix(point) {
     ctx.fillRect(point.x - 5, point.y - 5, 5, 5);
     ctx.fillStyle = "rgb(255,10,10)";
 }
+document.getElementById("p1").innerHTML = 'testing 123333';
