@@ -10,7 +10,7 @@ console.log('abcdefgh')
 
 // ctx.fillRect(30,30,30,30)
 // So here is a little test aa
-// --------
+// -------- aaa
 
 class Point {
     x:number
