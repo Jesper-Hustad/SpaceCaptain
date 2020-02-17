@@ -78,7 +78,11 @@ canvas.addEventListener('touchstart', function(e) {touchUpdate(e.changedTouches)
 
 canvas.addEventListener('touchmove', function(e) {touchUpdate(e.changedTouches)}, false);
 
-canvas.addEventListener('touchend', function(e) {touchUpdate(e.changedTouches)}, false);
+canvas.addEventListener('touchend', function(e) {
+    globalRight = false;
+    globalLeft = false;
+    document.getElementById("p1").innerHTML = 'L: ' + (globalLeft?'000000000000000000000':'______________________') + '   R: ' + (globalRight?'00000000000000000000':'____________________')
+}, false);
 
 
 // let touches : TouchList = new TouchList()  
@@ -102,7 +106,7 @@ function touchUpdate(touches:TouchList){
     globalLeft = left
     globalRight = right
     
-    document.getElementById("p1").innerHTML = 'Left: ' + left + '   Right: ' + right;
+    document.getElementById("p1").innerHTML = 'L: ' + (globalLeft?'000000000000000000000':'______________________') + '   R: ' + (globalRight?'00000000000000000000':'____________________')
 }
 
 let spaceship = new SpaceShip({x:60,y:100},30,90)
