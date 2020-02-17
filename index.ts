@@ -81,25 +81,36 @@ canvas.addEventListener('touchmove', function(e) {touchUpdate(e.changedTouches)}
 canvas.addEventListener('touchend', function(e) {touchUpdate(e.changedTouches)}, false);
 
 
-let touches : TouchList = new TouchList()  
+// let touches : TouchList = new TouchList()  
+
+let globalLeft = false
+let globalRight = false
 
 function touchUpdate(touches:TouchList){
-    let output = ' '
+    let left = false
+    let right = false
+
+    // go trough every touch
     for (let i = 0; i < touches.length; i++) {
-        const t = touches[i];
-
-        var rect = canvas.getBoundingClientRect();
-        drawPix({x:t.clientX-rect.left,y:t.clientY-rect.top})
-        output = output + '  ' + t.identifier
+        // if touch x coordinate is less than half the width the touch must be left, else right (add canvas offset from html)
+        if(touches[i].clientX-canvas.getBoundingClientRect().left<(size.x/2)){
+            left = true
+        }else{
+            right = true
+        }
     }
-    document.getElementById("p1").innerHTML = output;
+    globalLeft = left
+    globalRight = right
+    
+    document.getElementById("p1").innerHTML = 'Left: ' + left + '   Right: ' + right;
 }
-
 
 let spaceship = new SpaceShip({x:60,y:100},30,90)
 
 spaceship.draw(ctx)
 spaceship.drawCollision(ctx)
+
+
 
 function rotationToPoint(p:Point,rot:number){
     //https://academo.org/demos/rotation-about-point/ <-- read for info

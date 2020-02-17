@@ -54,16 +54,25 @@ var SpaceShip = /** @class */ (function () {
 canvas.addEventListener('touchstart', function (e) { touchUpdate(e.changedTouches); }, false);
 canvas.addEventListener('touchmove', function (e) { touchUpdate(e.changedTouches); }, false);
 canvas.addEventListener('touchend', function (e) { touchUpdate(e.changedTouches); }, false);
-var touches = new TouchList();
+// let touches : TouchList = new TouchList()  
+var globalLeft = false;
+var globalRight = false;
 function touchUpdate(touches) {
-    var output = ' ';
+    var left = false;
+    var right = false;
+    // go trough every touch
     for (var i = 0; i < touches.length; i++) {
-        var t = touches[i];
-        var rect = canvas.getBoundingClientRect();
-        drawPix({ x: t.clientX - rect.left, y: t.clientY - rect.top });
-        output = output + '  ' + t.identifier;
+        // if touch x coordinate is less than half the width the touch must be left, else right (add canvas offset from html)
+        if (touches[i].clientX - canvas.getBoundingClientRect().left < (size.x / 2)) {
+            left = true;
+        }
+        else {
+            right = true;
+        }
     }
-    document.getElementById("p1").innerHTML = output;
+    globalLeft = left;
+    globalRight = right;
+    document.getElementById("p1").innerHTML = 'Left: ' + left + '   Right: ' + right;
 }
 var spaceship = new SpaceShip({ x: 60, y: 100 }, 30, 90);
 spaceship.draw(ctx);
