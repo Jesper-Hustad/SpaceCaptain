@@ -1,16 +1,4 @@
-// console.log("Hello cruel world 222")
-
-var canvas = <HTMLCanvasElement> document.getElementById("mainCanvas");
-var ctx = canvas.getContext("2d");
-var size : Point = {x:window.innerWidth,y:window.innerHeight}
-ctx.canvas.width  = size.x;
-ctx.canvas.height = size.y;
-
-// console.log('abcdefgh')
-
-// ctx.fillRect(30,30,30,30)
-// So here is a little test aa
-// -------- aaa
+// Declare classes --------------------------------
 
 class Point {
     x:number
@@ -21,13 +9,18 @@ class Point {
     }
 }
 
-
 class SpaceShip {
     center: Point
     width:number
     height:number
 
     rotation:number
+    rotationSpeed:number = 0.01
+
+    velocityX:number = 0
+    velocityY:number = 0
+
+    thrustAmount:number = 2
 
     constructor(center: Point, width:number, height:number) {
         this.center = center
@@ -40,6 +33,18 @@ class SpaceShip {
         return this.center
     }
 
+    timeStep(){
+        this.rotation += this.rotationSpeed
+        this.center.x += this.velocityX
+        this.center.y += this.velocityY
+    }
+
+    thrust(){
+        let vec = rotationToPoint({x:this.thrustAmount,y:0},this.rotation)
+        this.velocityX += vec.x
+        this.velocityY += vec.y
+    }
+
     draw(ctx:CanvasRenderingContext2D){
         //since rocket is just a square it's some simple trignometry
         
@@ -49,7 +54,7 @@ class SpaceShip {
         ctx.rotate(this.rotation);
         ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height)
         ctx.restore()  
-        drawPix(this.center)      
+        // drawPix(this.center)      
 
     }
 
@@ -68,29 +73,47 @@ class SpaceShip {
             // ctx.closePath()
             ctx.stroke();
         })
-        
     }
-
 }
 
 
-canvas.addEventListener('touchstart', function(e) {touchUpdate(e.changedTouches)}, false);
-
-canvas.addEventListener('touchmove', function(e) {touchUpdate(e.changedTouches)}, false);
-
-canvas.addEventListener('touchend', function(e) {
-    globalRight = false;
-    globalLeft = false;
-    document.getElementById("p1").innerHTML = 'L: ' + (globalLeft?'000000000000000000000':'______________________') + '   R: ' + (globalRight?'00000000000000000000':'____________________')
-}, false);
-
-
-// let touches : TouchList = new TouchList()  
+// Declare global variables --------------------------------
+var canvas = <HTMLCanvasElement> document.getElementById("mainCanvas");
+var ctx = canvas.getContext("2d");
+var size : Point = {x:window.innerWidth,y:window.innerHeight}
+ctx.canvas.width  = size.x;
+ctx.canvas.height = size.y;
 
 let globalLeft = false
 let globalRight = false
 
+let refreshRate = 300
+
+let spaceship = new SpaceShip({x:60,y:100},30,90)
+
+
+// Touch detection -------------------------------------------
+canvas.addEventListener('touchstart', function(e) {touchUpdate(e.changedTouches)}, false);
+
+canvas.addEventListener('touchmove', function(e) {touchUpdate(e.changedTouches)}, false);
+
+canvas.addEventListener('touchend', function(e) {globalRight = globalLeft = false}, false);
+
 function touchUpdate(touches:TouchList){
+
+    let a = touchSide(touches)
+    globalLeft = a.left
+    globalRight = a.right
+    
+    // document.getElementById("p1").innerHTML = 'L: ' + (globalLeft?'000000000000000000000':'______________________') + '   R: ' + (globalRight?'00000000000000000000':'____________________')
+}
+
+
+
+
+// private helper functions -------------------------------- 
+
+function touchSide(touches:TouchList){
     let left = false
     let right = false
 
@@ -103,18 +126,8 @@ function touchUpdate(touches:TouchList){
             right = true
         }
     }
-    globalLeft = left
-    globalRight = right
-    
-    document.getElementById("p1").innerHTML = 'L: ' + (globalLeft?'000000000000000000000':'______________________') + '   R: ' + (globalRight?'00000000000000000000':'____________________')
+    return {left:left,right:right}
 }
-
-let spaceship = new SpaceShip({x:60,y:100},30,90)
-
-spaceship.draw(ctx)
-spaceship.drawCollision(ctx)
-
-
 
 function rotationToPoint(p:Point,rot:number){
     //https://academo.org/demos/rotation-about-point/ <-- read for info
@@ -124,11 +137,40 @@ function rotationToPoint(p:Point,rot:number){
             }
 }
 
-function drawPix(point:Point){
-    ctx.fillStyle = "rgb(0,0,0)"
-    ctx.fillRect(point.x-5,point.y-5,5,5)
-    ctx.fillStyle = "rgb(255,10,10)"
-}
+
+// Game loop -------------------------------------------------
+
+
+
+// spaceship.drawCollision(ctx)
+
+setInterval(function gameLoop() {
+
+    console.log("loop");
+    
+
+    const rotationChange = 0.01
+    if(globalLeft){
+        spaceship.rotationSpeed += rotationChange
+        spaceship.thrust()
+    }
+    if(globalRight){
+        spaceship.rotationSpeed += -rotationChange
+        spaceship.thrust()
+    }
+
+    spaceship.timeStep()
+    spaceship.draw(ctx)
+}, refreshRate);
+
+
+
+
+// function drawPix(point:Point){
+//     ctx.fillStyle = "rgb(0,0,0)"
+//     ctx.fillRect(point.x-5,point.y-5,5,5)
+//     ctx.fillStyle = "rgb(255,10,10)"
+// }
 
 // document.getElementById("p1").innerHTML = 'testing 123333';
 
