@@ -156,7 +156,7 @@ function gameLoop() {
         return;
     //sliders
     rotationChange = 0.0029 * rotDisplay;
-    gravity = 0.32 * gravDisplay;
+    gravity = 0.077 * gravDisplay;
     spaceship.thrustAmount = 0.33 * thrustDisplay;
     // activite engine from touch 
     if (globalLeft) {
