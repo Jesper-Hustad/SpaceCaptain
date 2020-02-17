@@ -15,6 +15,12 @@ rotationSlider.oninput = function () {
     rotDisplay = parseInt(this.value) / 30;
     console.log(rotDisplay);
 };
+var thrustSlider = document.getElementById("thrustSlider");
+var thrustDisplay = parseInt(thrustSlider.value) / 30;
+thrustSlider.oninput = function () {
+    thrustDisplay = parseInt(this.value) / 30;
+    console.log(thrustDisplay);
+};
 // sliderGrav.innerHTML = slider.value;
 // roationSlider.oninput = function() {
 //   roationDisplay.innerHTML = (<HTMLInputElement>this).value;
@@ -92,6 +98,7 @@ var refreshRate = 17;
 var rotationChange = 0.003;
 var gravity = 0.1;
 var spaceship = new SpaceShip({ x: 60, y: 100 }, 30, 90);
+// canvas.requestFullscreen()
 // Touch detection -------------------------------------------
 canvas.addEventListener('touchstart', function (e) { touchUpdate(e.changedTouches); }, false);
 canvas.addEventListener('touchmove', function (e) { touchUpdate(e.changedTouches); }, false);
@@ -140,15 +147,17 @@ function reset() {
 function debug() {
     isPaused = false;
     gameLoop();
-    document.getElementById("title").innerHTML = "Gravity: " + gravity.toFixed(4) + '   Rotation: ' + rotationChange.toFixed(6);
+    document.getElementById("title").innerHTML = "Gravity: " + gravity.toFixed(4) + '   Rotation: ' + rotationChange.toFixed(6) + '   Thrust: ' + spaceship.thrustAmount.toFixed(6);
+    isPaused = true;
     isPaused = true;
 }
 function gameLoop() {
     if (isPaused)
         return;
     //sliders
-    rotationChange = 0.003 * rotDisplay;
-    gravity = 0.1 * gravDisplay;
+    rotationChange = 0.0029 * rotDisplay;
+    gravity = 0.77 * gravDisplay;
+    spaceship.thrustAmount = 0.33 * thrustDisplay;
     // activite engine from touch 
     if (globalLeft) {
         spaceship.rotationSpeed += rotationChange;
