@@ -5,9 +5,29 @@
 canvas{
     touch-action: none;
 }
+div.side{
+    float: left;
+    font-size: 250%;
+}
 </style>
 <body>
-    <h1 id="p1">123</h1>
+    <h1 id="title">testing</h1>
+    <!-- <h1 id="p1">123</h1> -->
+    <div id="side">
+
+    <button onclick="pause()">Pause</button>
+    <button onclick="reset()">Reset</button>
+
+    gravity: 
+    <input type="range" min="0" max="100" value="50" class="slider" id="gravitySlider">
+
+    &nbsp; &nbsp; rotation:
+    <input type="range" min="0" max="100" value="50" class="slider" id="rotationSlider">
+
+    <button onclick="debug()">Debug</button>
+
+
+    </div>
     
 <canvas id="mainCanvas" width="600" height="600" style="border:solid black 1px;" ></canvas>
 

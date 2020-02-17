@@ -1,3 +1,40 @@
+// Slider function ------------------------------------------
+
+var gravitySlider = document.getElementById("gravitySlider");
+// var gravityDisplay = document.getElementById("gravityDiplay");
+let gravDisplay = parseInt((<HTMLInputElement>gravitySlider).value)/30;
+// gravityDisplay.innerHTML = (<HTMLInputElement>gravitySlider).value;
+// gravityDisplay.innerHTML = 'hello'
+
+gravitySlider.oninput = function() {
+    gravDisplay = parseInt((<HTMLInputElement>this).value)/30;
+    console.log(gravDisplay);    
+  }
+
+
+var rotationSlider = document.getElementById("rotationSlider");
+let rotDisplay = parseInt((<HTMLInputElement>rotationSlider).value)/30;
+// var roationDisplay = document.getElementById("rotationDiplay");
+
+rotationSlider.oninput = function() {
+    rotDisplay = parseInt((<HTMLInputElement>this).value)/30;
+    console.log(rotDisplay);
+    
+  }
+
+// sliderGrav.innerHTML = slider.value;
+
+// roationSlider.oninput = function() {
+//   roationDisplay.innerHTML = (<HTMLInputElement>this).value;
+// }
+// document.getElementById("rotationDiplay").innerHTML = "testing54321"
+
+// var roationDisplay = document.getElementById("rotationDiplay");
+// roationDisplay.innerHTML = "hello dude"
+
+
+
+
 // Declare classes --------------------------------
 
 class Point {
@@ -15,18 +52,18 @@ class SpaceShip {
     height:number
 
     rotation:number
-    rotationSpeed:number = 0.01
+    rotationSpeed:number = 0
 
     velocityX:number = 0
     velocityY:number = 0
 
-    thrustAmount:number = 2
+    thrustAmount:number = 0.33
 
     constructor(center: Point, width:number, height:number) {
         this.center = center
         this.width = width
         this.height = height
-        this.rotation= Math.PI/4
+        this.rotation= 0 - (Math.PI/2)
     }
 
     getCenter(){
@@ -40,9 +77,9 @@ class SpaceShip {
     }
 
     thrust(){
-        let vec = rotationToPoint({x:this.thrustAmount,y:0},this.rotation)
-        this.velocityX += vec.x
-        this.velocityY += vec.y
+        let vec = rotationToPoint({x:1,y:0},this.rotation)
+        this.velocityX += vec.x * this.thrustAmount
+        this.velocityY += vec.y * this.thrustAmount
     }
 
     draw(ctx:CanvasRenderingContext2D){
@@ -51,7 +88,7 @@ class SpaceShip {
         ctx.fillStyle = "rgb(255,10,10)"
         ctx.save()
         ctx.translate(this.center.x, this.center.y);
-        ctx.rotate(this.rotation);
+        ctx.rotate(this.rotation-(Math.PI/2));
         ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height)
         ctx.restore()  
         // drawPix(this.center)      
@@ -87,7 +124,9 @@ ctx.canvas.height = size.y;
 let globalLeft = false
 let globalRight = false
 
-let refreshRate = 300
+let refreshRate = 17
+let rotationChange = 0.003
+let gravity = 0.1
 
 let spaceship = new SpaceShip({x:60,y:100},30,90)
 
@@ -107,8 +146,6 @@ function touchUpdate(touches:TouchList){
     
     // document.getElementById("p1").innerHTML = 'L: ' + (globalLeft?'000000000000000000000':'______________________') + '   R: ' + (globalRight?'00000000000000000000':'____________________')
 }
-
-
 
 
 // private helper functions -------------------------------- 
@@ -137,19 +174,41 @@ function rotationToPoint(p:Point,rot:number){
             }
 }
 
-
 // Game loop -------------------------------------------------
 
+let isPaused = false
+function pause(){
+    isPaused = !isPaused
+}
 
+function reset(){
+    spaceship = new SpaceShip({x:60,y:100},30,90)
+    //clear screen
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// spaceship.drawCollision(ctx)
+    // draw new frame
+    spaceship.draw(ctx)
 
-setInterval(function gameLoop() {
-
-    console.log("loop");
     
+}
 
-    const rotationChange = 0.01
+function debug(){
+    isPaused = false
+    gameLoop()
+    document.getElementById("title").innerHTML = "Gravity: " + gravity.toFixed(4) + '   Rotation: ' + rotationChange.toFixed(6)
+    isPaused = true
+}
+
+function gameLoop() {
+
+    if(isPaused) return
+
+    //sliders
+    rotationChange = 0.003 * rotDisplay
+    gravity = 0.1 * gravDisplay
+
+    
+    // activite engine from touch 
     if(globalLeft){
         spaceship.rotationSpeed += rotationChange
         spaceship.thrust()
@@ -159,9 +218,21 @@ setInterval(function gameLoop() {
         spaceship.thrust()
     }
 
+    // do a timestep
     spaceship.timeStep()
+
+    // gravity
+    spaceship.velocityY += gravity
+
+    //clear screen
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // draw new frame
     spaceship.draw(ctx)
-}, refreshRate);
+
+}
+
+setInterval(gameLoop, refreshRate);
 
 
 
@@ -173,7 +244,6 @@ setInterval(function gameLoop() {
 // }
 
 // document.getElementById("p1").innerHTML = 'testing 123333';
-
 
 
 // output = output + e.changedTouches[i].identifier + '  '
