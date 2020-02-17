@@ -220,7 +220,7 @@ function gameLoop() {
 
     //sliders
     rotationChange = 0.0029 * rotDisplay
-    gravity = 0.77 * gravDisplay
+    gravity = 0.32 * gravDisplay
     spaceship.thrustAmount = 0.33 * thrustDisplay 
 
     
@@ -231,7 +231,7 @@ function gameLoop() {
     }
     if(globalRight){
         spaceship.rotationSpeed += -rotationChange
-        spaceship.thrust()
+        spaceship.thrust()  
     }
 
     // do a timestep
