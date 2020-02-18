@@ -152,6 +152,7 @@ function debug() {
     isPaused = true;
 }
 function gameLoop() {
+    // SOME SHITE
     if (isPaused)
         return;
     //sliders

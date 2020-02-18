@@ -215,7 +215,7 @@ function debug(){
 }
 
 function gameLoop() {
-
+// SOME SHITE
     if(isPaused) return
 
     //sliders
